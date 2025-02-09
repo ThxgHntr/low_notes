@@ -30,22 +30,33 @@ class EditNoteState extends State<EditNote> {
 
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextField(
-            controller: widget.titleController,
-            decoration: const InputDecoration(
-              hintText: 'Title',
-              border: InputBorder.none,
-            ),
-            style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w600),
-          ),
-        ),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: QuillEditor.basic(
-              controller: widget.contentController,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextField(
+                    controller: widget.titleController,
+                    decoration: const InputDecoration(
+                      hintText: 'Title',
+                      border: InputBorder.none,
+                    ),
+                    style: const TextStyle(
+                        fontSize: 26, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    right: 16.0,
+                    bottom: 24.0,
+                  ),
+                  child: QuillEditor.basic(
+                    controller: widget.contentController,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

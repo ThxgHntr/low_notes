@@ -20,6 +20,7 @@ class FirebaseNoteServices {
 
   Future<void> deleteNote(String noteId, String userId) async {
     await _database.child(userId).child(noteId).remove();
+    await removeImage(noteId);
   }
 
   Future<String?> pickImage(String noteId) async {
