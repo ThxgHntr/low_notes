@@ -62,6 +62,8 @@ class NoteCreateViewState extends State<NoteCreateView> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Note'),
@@ -101,8 +103,8 @@ class NoteCreateViewState extends State<NoteCreateView> {
             GestureDetector(
               onLongPress: _removeImage,
               child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: 300,
+                constraints: BoxConstraints(
+                  maxWidth: screenWidth,
                   maxHeight: 200,
                 ),
                 child: Image.network(

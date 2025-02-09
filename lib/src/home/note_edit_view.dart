@@ -98,6 +98,8 @@ class NoteEditViewState extends State<NoteEditView> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Note'),
@@ -127,8 +129,8 @@ class NoteEditViewState extends State<NoteEditView> {
             GestureDetector(
               onLongPress: _removeImage,
               child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: 300,
+                constraints: BoxConstraints(
+                  maxWidth: screenWidth,
                   maxHeight: 200,
                 ),
                 child: Image.network(
