@@ -90,6 +90,7 @@ class ExpandableFabState extends State<ExpandableFab>
                   child: FloatingActionButton.extended(
                     onPressed: () {
                       Navigator.pushNamed(context, NoteCreateView.routeName);
+                      _toggle();
                     },
                     heroTag: 'text',
                     icon: const Icon(Icons.text_fields),

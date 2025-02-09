@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_quill/translations.dart';
 
 import 'home/note_details_view.dart';
 import 'home/note_item_list_view.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
+            FlutterQuillLocalizations.delegate,
           ],
           supportedLocales: const [
             Locale('en', ''), // English, no country code
@@ -62,7 +64,7 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
             colorScheme:
                 ColorScheme.fromSeed(seedColor: Colors.blueAccent).copyWith(
-              surface: Colors.grey[200]!,
+              surface: Colors.grey[100]!,
             ),
           ),
           darkTheme: ThemeData(

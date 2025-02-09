@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 class EditNote extends StatefulWidget {
   const EditNote({super.key});
@@ -9,7 +10,7 @@ class EditNote extends StatefulWidget {
 
 class EditNoteState extends State<EditNote> {
   final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _contentController = TextEditingController();
+  final QuillController _contentController = QuillController.basic();
 
   @override
   void dispose() {
@@ -20,34 +21,72 @@ class EditNoteState extends State<EditNote> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextField(
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+    final toolbarColor = isDarkTheme ? Colors.grey[800] : Colors.grey[300];
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: TextField(
             controller: _titleController,
             decoration: const InputDecoration(
               hintText: 'Title',
               border: InputBorder.none,
             ),
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+            style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w600),
           ),
-          Expanded(
-            child: TextField(
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: QuillEditor.basic(
               controller: _contentController,
-              decoration: const InputDecoration(
-                hintText: 'Note',
-                border: InputBorder.none,
-              ),
-              maxLines: null,
-              expands: true,
-              textAlignVertical: TextAlignVertical.top,
-              style: const TextStyle(fontSize: 18),
             ),
           ),
-        ],
-      ),
+        ),
+        Container(
+          color: toolbarColor,
+          width: double.infinity,
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  QuillToolbarHistoryButton(
+                    isUndo: true,
+                    controller: _contentController,
+                  ),
+                  QuillToolbarHistoryButton(
+                    isUndo: false,
+                    controller: _contentController,
+                  ),
+                  QuillToolbarToggleStyleButton(
+                    controller: _contentController,
+                    attribute: Attribute.bold,
+                  ),
+                  QuillToolbarToggleStyleButton(
+                    controller: _contentController,
+                    attribute: Attribute.italic,
+                  ),
+                  QuillToolbarToggleStyleButton(
+                    controller: _contentController,
+                    attribute: Attribute.underline,
+                  ),
+                  QuillToolbarToggleCheckListButton(
+                    controller: _contentController,
+                  ),
+                  QuillToolbarFontSizeButton(
+                    controller: _contentController,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
