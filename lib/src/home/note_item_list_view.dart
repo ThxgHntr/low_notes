@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:low_notes/src/models/note_model.dart';
+import 'package:low_notes/src/services/firebase_auth_services.dart'; // Add this import
 
 import '../settings/settings_view.dart';
+import '../login/login_view.dart'; // Add this import
 import 'note_details_view.dart';
 
 /// Displays a list of SampleItems.
@@ -17,53 +19,54 @@ class NoteItemListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              // Navigate to the settings page. If the user leaves and returns
-              // to the app after it has been killed while running in the
-              // background, the navigation stack is restored.
-              Navigator.restorablePushNamed(context, SettingsView.routeName);
-            },
-          ),
-        ],
-      ),
+    final FirebaseAuthServices authServices = FirebaseAuthServices();
 
-      // To work with lists that may contain a large number of items, it’s best
-      // to use the ListView.builder constructor.
-      //
-      // In contrast to the default ListView constructor, which requires
-      // building all Widgets up front, the ListView.builder constructor lazily
-      // builds Widgets as they’re scrolled into view.
-      body: ListView.builder(
-        // Providing a restorationId allows the ListView to restore the
-        // scroll position when a user leaves and returns to the app after it
-        // has been killed while running in the background.
-        restorationId: 'sampleItemListView',
-        itemCount: items.length,
-        itemBuilder: (BuildContext context, int index) {
-          final item = items[index];
-
-          return ListTile(
-              title: Text('SampleItem ${item.id}'),
-              leading: const CircleAvatar(
-                // Display the Flutter Logo image asset.
-                foregroundImage: AssetImage('assets/images/flutter_logo.png'),
-              ),
-              onTap: () {
-                // Navigate to the details page. If the user leaves and returns to
-                // the app after it has been killed while running in the
-                // background, the navigation stack is restored.
-                Navigator.restorablePushNamed(
-                  context,
-                  NoteDetailsView.routeName,
+    return FutureBuilder(
+      future: authServices.isLoggedIn(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasData && snapshot.data == false) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushReplacementNamed(context, LoginView.routeName);
+          });
+          return const SizedBox.shrink();
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.restorablePushNamed(
+                        context, SettingsView.routeName);
+                  },
+                ),
+              ],
+            ),
+            body: ListView.builder(
+              restorationId: 'sampleItemListView',
+              itemCount: items.length,
+              itemBuilder: (BuildContext context, int index) {
+                final item = items[index];
+                return ListTile(
+                  title: Text('SampleItem ${item.id}'),
+                  leading: const CircleAvatar(
+                    foregroundImage:
+                        AssetImage('assets/images/flutter_logo.png'),
+                  ),
+                  onTap: () {
+                    Navigator.restorablePushNamed(
+                      context,
+                      NoteDetailsView.routeName,
+                    );
+                  },
                 );
-              });
-        },
-      ),
+              },
+            ),
+          );
+        }
+      },
     );
   }
 }

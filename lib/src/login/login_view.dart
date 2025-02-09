@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:low_notes/src/services/firebase_auth_services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-/// Displays detailed information about a SampleItem.
-class NoteDetailsView extends StatefulWidget {
-  const NoteDetailsView({super.key});
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
 
   static const routeName = '/login';
 
   @override
-  NoteDetailsViewState createState() => NoteDetailsViewState();
+  LoginViewState createState() => LoginViewState(); // Rename state class
 }
 
-class NoteDetailsViewState extends State<NoteDetailsView> {
+class LoginViewState extends State<LoginView> {
+  // Rename state class
   final FirebaseAuthServices authServices = FirebaseAuthServices();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
+        child: ElevatedButton.icon(
           onPressed: () async {
             await authServices.signInWithGoogle();
             if (context.mounted) {
               Navigator.pushNamed(context, '/');
             }
           },
-          child: const Text('Sign in with Google'),
+          icon: const FaIcon(FontAwesomeIcons.google),
+          label: const Text('Sign in with Google'),
         ),
       ),
     );

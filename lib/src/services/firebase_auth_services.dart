@@ -20,4 +20,8 @@ class FirebaseAuthServices {
     await GoogleSignIn().signOut();
     await _auth.signOut();
   }
+
+  Future<bool> isLoggedIn() {
+    return _auth.authStateChanges().map((user) => user != null).first;
+  }
 }
