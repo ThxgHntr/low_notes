@@ -1,5 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:async';
+import 'dart:io';
 import '../models/note_model.dart';
 
 class FirebaseNoteServices {
@@ -17,6 +20,23 @@ class FirebaseNoteServices {
 
   Future<void> deleteNote(String noteId, String userId) async {
     await _database.child(userId).child(noteId).remove();
+  }
+
+  Future<String?> pickImage(String noteId) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      final storageRef = FirebaseStorage.instance.ref().child('notes/$noteId');
+      await storageRef.putFile(File(pickedFile.path));
+      return await storageRef.getDownloadURL();
+    }
+    return null;
+  }
+
+  Future<void> removeImage(String noteId) async {
+    final storageRef = FirebaseStorage.instance.ref().child('notes/$noteId');
+    await storageRef.delete();
   }
 
   Stream<List<NoteModel>> fetchNotes(String userId) {

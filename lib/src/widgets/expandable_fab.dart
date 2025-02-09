@@ -65,25 +65,6 @@ class ExpandableFabState extends State<ExpandableFab>
             animation: _controller,
             builder: (context, child) {
               return Transform.translate(
-                offset: Offset(0, _translateAnimation.value * 2),
-                child: Opacity(
-                  opacity: _fadeAnimation.value,
-                  child: FloatingActionButton.extended(
-                    onPressed: () {
-                      // Handle Image button press
-                    },
-                    heroTag: 'image',
-                    icon: const Icon(Icons.image),
-                    label: const Text('Image'),
-                  ),
-                ),
-              );
-            },
-          ),
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return Transform.translate(
                 offset: Offset(0, _translateAnimation.value),
                 child: Opacity(
                   opacity: _fadeAnimation.value,

@@ -1,9 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:low_notes/src/services/firebase_auth_services.dart';
 import '../models/note_model.dart';
 import '../services/firebase_note_services.dart';
@@ -28,13 +24,8 @@ class NoteCreateViewState extends State<NoteCreateView> {
   String noteId = Uuid().v4();
 
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      final storageRef = FirebaseStorage.instance.ref().child('notes/$noteId');
-      await storageRef.putFile(File(pickedFile.path));
-      final url = await storageRef.getDownloadURL();
+    final url = await noteServices.pickImage(noteId);
+    if (url != null) {
       setState(() {
         imageUrl = url;
       });
@@ -42,9 +33,31 @@ class NoteCreateViewState extends State<NoteCreateView> {
   }
 
   Future<void> _removeImage() async {
-    setState(() {
-      imageUrl = null;
-    });
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete Image'),
+          content: const Text('Are you sure you want to delete this image?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+    if (shouldDelete == true) {
+      await noteServices.removeImage(noteId);
+      setState(() {
+        imageUrl = null;
+      });
+    }
   }
 
   @override
@@ -85,28 +98,19 @@ class NoteCreateViewState extends State<NoteCreateView> {
       body: Column(
         children: [
           if (imageUrl != null)
-            Stack(
-              children: [
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 300,
-                    maxHeight: 200,
-                  ),
-                  child: Image.network(
-                    imageUrl!,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
+            GestureDetector(
+              onLongPress: _removeImage,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 300,
+                  maxHeight: 200,
                 ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: IconButton(
-                    icon: const Icon(Icons.close, color: Colors.red),
-                    onPressed: _removeImage,
-                  ),
+                child: Image.network(
+                  imageUrl!,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
                 ),
-              ],
+              ),
             ),
           Expanded(
             child: EditNote(

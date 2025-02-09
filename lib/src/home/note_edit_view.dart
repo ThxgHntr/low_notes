@@ -1,9 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:low_notes/src/models/note_model.dart';
 import 'package:low_notes/src/services/firebase_note_services.dart';
 import '../widgets/edit_note.dart';
@@ -40,14 +36,8 @@ class NoteEditViewState extends State<NoteEditView> {
   }
 
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      final storageRef =
-          FirebaseStorage.instance.ref().child('notes/${widget.note.id}');
-      await storageRef.putFile(File(pickedFile.path));
-      final url = await storageRef.getDownloadURL();
+    final url = await noteServices.pickImage(widget.note.id);
+    if (url != null) {
       setState(() {
         imageUrl = url;
       });
@@ -56,10 +46,32 @@ class NoteEditViewState extends State<NoteEditView> {
   }
 
   Future<void> _removeImage() async {
-    setState(() {
-      imageUrl = null;
-    });
-    _updateNote();
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete Image'),
+          content: const Text('Are you sure you want to delete this image?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+    if (shouldDelete == true) {
+      await noteServices.removeImage(widget.note.id);
+      setState(() {
+        imageUrl = null;
+      });
+      _updateNote();
+    }
   }
 
   void _updateNote() {
@@ -112,28 +124,19 @@ class NoteEditViewState extends State<NoteEditView> {
       body: Column(
         children: [
           if (imageUrl != null)
-            Stack(
-              children: [
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxWidth: 300,
-                    maxHeight: 200,
-                  ),
-                  child: Image.network(
-                    imageUrl!,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
+            GestureDetector(
+              onLongPress: _removeImage,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 300,
+                  maxHeight: 200,
                 ),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: IconButton(
-                    icon: const Icon(Icons.close, color: Colors.red),
-                    onPressed: _removeImage,
-                  ),
+                child: Image.network(
+                  imageUrl!,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
                 ),
-              ],
+              ),
             ),
           Expanded(
             child: EditNote(
