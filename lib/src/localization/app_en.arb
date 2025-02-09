@@ -1,0 +1,6 @@
+{
+  "appTitle": "low_notes",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}
