@@ -1,8 +1,10 @@
+import 'package:flutter_quill/flutter_quill.dart' as quill;
+
 class NoteModel {
   String id;
   String userId;
   String title;
-  String note;
+  quill.Document note; // Change to quill.Document
   String? imageUrl;
   int createdAt;
   int updatedAt;
@@ -22,7 +24,7 @@ class NoteModel {
       'id': id,
       'userId': userId,
       'title': title,
-      'note': note,
+      'note': note.toDelta().toJson(), // Convert to JSON
       'imageUrl': imageUrl,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
@@ -34,7 +36,7 @@ class NoteModel {
       id: map['id'],
       userId: map['userId'],
       title: map['title'],
-      note: map['note'],
+      note: quill.Document.fromJson(map['note']), // Convert from JSON
       imageUrl: map['imageUrl'],
       createdAt: map['createdAt'],
       updatedAt: map['updatedAt'],

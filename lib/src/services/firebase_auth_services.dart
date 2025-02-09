@@ -24,4 +24,9 @@ class FirebaseAuthServices {
   Future<bool> isLoggedIn() {
     return GoogleSignIn().isSignedIn();
   }
+
+  Future<String> getUserId() async {
+    final user = _auth.currentUser;
+    return user?.uid ?? '';
+  }
 }
