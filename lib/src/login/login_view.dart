@@ -23,7 +23,7 @@ class LoginViewState extends State<LoginView> {
           onPressed: () async {
             await authServices.signInWithGoogle();
             if (context.mounted) {
-              Navigator.pushNamed(context, '/');
+              Navigator.pushReplacementNamed(context, '/'); // Use pushReplacementNamed
             }
           },
           icon: const FaIcon(FontAwesomeIcons.google),

@@ -34,6 +34,7 @@ class NoteItemListView extends StatelessWidget {
         } else {
           return Scaffold(
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               actions: [
                 IconButton(
                   icon: const Icon(Icons.settings),

@@ -59,16 +59,17 @@ class MyApp extends StatelessWidget {
           // SettingsController to display the correct theme.
           theme: ThemeData(
             useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink).copyWith(
-              surface: Colors.grey[50]!,
+            colorScheme:
+                ColorScheme.fromSeed(seedColor: Colors.blueAccent).copyWith(
+              surface: Colors.grey[200]!,
             ),
           ),
           darkTheme: ThemeData(
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.pinkAccent,
+              seedColor: Colors.white,
               brightness: Brightness.dark,
-            ).copyWith(surface: Colors.grey[850]!),
+            ).copyWith(surface: Colors.grey[900]!),
           ),
           themeMode: settingsController.themeMode,
 
