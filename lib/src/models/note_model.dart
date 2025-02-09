@@ -2,7 +2,7 @@ class NoteModel {
   String id;
   String userId;
   String title;
-  String content;
+  String note;
   String? imageUrl;
   int createdAt;
   int updatedAt;
@@ -11,7 +11,7 @@ class NoteModel {
     required this.id,
     required this.userId,
     required this.title,
-    required this.content,
+    required this.note,
     this.imageUrl,
     required this.createdAt,
     required this.updatedAt,
@@ -22,7 +22,7 @@ class NoteModel {
       'id': id,
       'userId': userId,
       'title': title,
-      'content': content,
+      'note': note,
       'imageUrl': imageUrl,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
@@ -34,7 +34,7 @@ class NoteModel {
       id: map['id'],
       userId: map['userId'],
       title: map['title'],
-      content: map['content'],
+      note: map['note'],
       imageUrl: map['imageUrl'],
       createdAt: map['createdAt'],
       updatedAt: map['updatedAt'],

@@ -29,19 +29,21 @@ class EditNoteState extends State<EditNote> {
             controller: _titleController,
             decoration: const InputDecoration(
               hintText: 'Title',
-              border: OutlineInputBorder(),
+              border: InputBorder.none,
             ),
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
           ),
-          const SizedBox(height: 16),
           Expanded(
             child: TextField(
               controller: _contentController,
               decoration: const InputDecoration(
-                hintText: 'Content',
-                border: OutlineInputBorder(),
+                hintText: 'Note',
+                border: InputBorder.none,
               ),
               maxLines: null,
               expands: true,
+              textAlignVertical: TextAlignVertical.top,
+              style: const TextStyle(fontSize: 18),
             ),
           ),
         ],

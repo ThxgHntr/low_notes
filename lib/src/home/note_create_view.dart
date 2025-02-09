@@ -17,6 +17,14 @@ class NoteCreateView extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () {
+              // Handle more options
+            },
+          ),
+        ],
       ),
       body: const EditNote(),
     );
