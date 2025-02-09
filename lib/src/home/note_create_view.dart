@@ -97,30 +97,29 @@ class NoteCreateViewState extends State<NoteCreateView> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          if (imageUrl != null)
-            GestureDetector(
-              onLongPress: _removeImage,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: screenWidth,
-                  maxHeight: 200,
-                ),
-                child: Image.network(
-                  imageUrl!,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            if (imageUrl != null)
+              GestureDetector(
+                onLongPress: _removeImage,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: screenWidth,
+                  ),
+                  child: Image.network(
+                    imageUrl!,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ),
                 ),
               ),
-            ),
-          Expanded(
-            child: EditNote(
+            EditNote(
               titleController: titleController,
               contentController: contentController,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

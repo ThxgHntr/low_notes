@@ -31,41 +31,38 @@ class EditNoteState extends State<EditNote> {
 
     return Column(
       children: [
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: TextField(
-                    controller: widget.titleController,
-                    decoration: const InputDecoration(
-                      hintText: 'Title',
-                      border: InputBorder.none,
-                    ),
-                    style: const TextStyle(
-                        fontSize: 26, fontWeight: FontWeight.w600),
-                  ),
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                controller: widget.titleController,
+                decoration: const InputDecoration(
+                  hintText: 'Title',
+                  border: InputBorder.none,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 16.0,
-                    right: 16.0,
-                    bottom: 24.0,
-                  ),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: screenHeight / 2,
-                    ),
-                    child: QuillEditor.basic(
-                      controller: widget.contentController,
-                    ),
-                  ),
-                ),
-              ],
+                style:
+                    const TextStyle(fontSize: 26, fontWeight: FontWeight.w600),
+              ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                right: 16.0,
+                bottom: 24.0,
+              ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: screenHeight / 2,
+                ),
+                child: QuillEditor.basic(
+                  controller: widget.contentController,
+                ),
+              ),
+            ),
+          ],
         ),
+        
         Container(
           color: toolbarColor,
           width: double.infinity,
