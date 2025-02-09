@@ -4,6 +4,7 @@ import 'package:low_notes/src/services/firebase_auth_services.dart';
 import '../models/note_model.dart';
 import '../services/firebase_note_services.dart';
 import '../widgets/edit_note.dart';
+import 'package:uuid/uuid.dart';
 
 class NoteCreateView extends StatelessWidget {
   const NoteCreateView({super.key});
@@ -14,6 +15,9 @@ class NoteCreateView extends StatelessWidget {
   Widget build(BuildContext context) {
     final FirebaseAuthServices authServices = FirebaseAuthServices();
     final FirebaseNoteServices noteServices = FirebaseNoteServices();
+    final TextEditingController titleController = TextEditingController();
+    final QuillController contentController = QuillController.basic();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Note'),
@@ -35,10 +39,10 @@ class NoteCreateView extends StatelessWidget {
             onPressed: () async {
               String userId = await authServices.getUserId();
               final note = NoteModel(
-                id: 'fgqwgqg',
+                id: const Uuid().v4(),
                 userId: userId,
-                title: 'Note Title',
-                note: Document(),
+                title: titleController.text,
+                note: contentController.document,
                 createdAt: DateTime.now().millisecondsSinceEpoch,
                 updatedAt: DateTime.now().millisecondsSinceEpoch,
               );
@@ -48,7 +52,10 @@ class NoteCreateView extends StatelessWidget {
           ),
         ],
       ),
-      body: const EditNote(),
+      body: EditNote(
+        titleController: titleController,
+        contentController: contentController,
+      ),
     );
   }
 }

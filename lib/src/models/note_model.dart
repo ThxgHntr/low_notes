@@ -21,10 +21,9 @@ class NoteModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'userId': userId,
       'title': title,
-      'note': note.toDelta().toJson(), // Convert to JSON
+      'note': note.toDelta().toJson(),
       'imageUrl': imageUrl,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
@@ -36,7 +35,7 @@ class NoteModel {
       id: map['id'],
       userId: map['userId'],
       title: map['title'],
-      note: quill.Document.fromJson(map['note']), // Convert from JSON
+      note: quill.Document.fromJson(map['note']),
       imageUrl: map['imageUrl'],
       createdAt: map['createdAt'],
       updatedAt: map['updatedAt'],

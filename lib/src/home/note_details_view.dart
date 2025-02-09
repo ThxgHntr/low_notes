@@ -27,7 +27,7 @@ class NoteDetailsView extends StatelessWidget {
           ),
         ],
       ),
-      body: const EditNote(),
+      // body: const EditNote(),
     );
   }
 }

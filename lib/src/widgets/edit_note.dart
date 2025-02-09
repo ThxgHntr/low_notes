@@ -2,20 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class EditNote extends StatefulWidget {
-  const EditNote({super.key});
+  const EditNote({
+    super.key,
+    required this.titleController,
+    required this.contentController,
+  });
+
+  final TextEditingController titleController;
+  final QuillController contentController;
 
   @override
   EditNoteState createState() => EditNoteState();
 }
 
 class EditNoteState extends State<EditNote> {
-  final TextEditingController _titleController = TextEditingController();
-  final QuillController _contentController = QuillController.basic();
-
   @override
   void dispose() {
-    _titleController.dispose();
-    _contentController.dispose();
+    widget.titleController.dispose();
+    widget.contentController.dispose();
     super.dispose();
   }
 
@@ -29,7 +33,7 @@ class EditNoteState extends State<EditNote> {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: TextField(
-            controller: _titleController,
+            controller: widget.titleController,
             decoration: const InputDecoration(
               hintText: 'Title',
               border: InputBorder.none,
@@ -41,7 +45,7 @@ class EditNoteState extends State<EditNote> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: QuillEditor.basic(
-              controller: _contentController,
+              controller: widget.contentController,
             ),
           ),
         ),
@@ -57,29 +61,29 @@ class EditNoteState extends State<EditNote> {
                 children: [
                   QuillToolbarHistoryButton(
                     isUndo: true,
-                    controller: _contentController,
+                    controller: widget.contentController,
                   ),
                   QuillToolbarHistoryButton(
                     isUndo: false,
-                    controller: _contentController,
+                    controller: widget.contentController,
                   ),
                   QuillToolbarToggleStyleButton(
-                    controller: _contentController,
+                    controller: widget.contentController,
                     attribute: Attribute.bold,
                   ),
                   QuillToolbarToggleStyleButton(
-                    controller: _contentController,
+                    controller: widget.contentController,
                     attribute: Attribute.italic,
                   ),
                   QuillToolbarToggleStyleButton(
-                    controller: _contentController,
+                    controller: widget.contentController,
                     attribute: Attribute.underline,
                   ),
                   QuillToolbarToggleCheckListButton(
-                    controller: _contentController,
+                    controller: widget.contentController,
                   ),
                   QuillToolbarFontSizeButton(
-                    controller: _contentController,
+                    controller: widget.contentController,
                   ),
                 ],
               ),
