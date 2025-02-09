@@ -38,7 +38,6 @@ class NoteItem extends StatelessWidget {
               ),
             ),
           if (note.title.isNotEmpty) ...[
-            const SizedBox(height: 8.0),
             Text(
               note.title,
               style: TextStyle(

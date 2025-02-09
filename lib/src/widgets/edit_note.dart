@@ -27,6 +27,7 @@ class EditNoteState extends State<EditNote> {
   Widget build(BuildContext context) {
     final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
     final toolbarColor = isDarkTheme ? Colors.grey[800] : Colors.grey[300];
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Column(
       children: [
@@ -52,8 +53,13 @@ class EditNoteState extends State<EditNote> {
                     right: 16.0,
                     bottom: 24.0,
                   ),
-                  child: QuillEditor.basic(
-                    controller: widget.contentController,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: screenHeight / 2,
+                    ),
+                    child: QuillEditor.basic(
+                      controller: widget.contentController,
+                    ),
                   ),
                 ),
               ],
