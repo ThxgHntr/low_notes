@@ -118,6 +118,40 @@ class NoteCreateViewState extends State<NoteCreateView> {
               titleController: titleController,
               contentController: contentController,
             ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  QuillToolbarHistoryButton(
+                    isUndo: true,
+                    controller: contentController,
+                  ),
+                  QuillToolbarHistoryButton(
+                    isUndo: false,
+                    controller: contentController,
+                  ),
+                  QuillToolbarToggleStyleButton(
+                    controller: contentController,
+                    attribute: Attribute.bold,
+                  ),
+                  QuillToolbarToggleStyleButton(
+                    controller: contentController,
+                    attribute: Attribute.italic,
+                  ),
+                  QuillToolbarToggleStyleButton(
+                    controller: contentController,
+                    attribute: Attribute.underline,
+                  ),
+                  QuillToolbarToggleCheckListButton(
+                    controller: contentController,
+                  ),
+                  QuillToolbarFontSizeButton(
+                    controller: contentController,
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

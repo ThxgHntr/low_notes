@@ -25,8 +25,6 @@ class EditNoteState extends State<EditNote> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
-    final toolbarColor = isDarkTheme ? Colors.grey[800] : Colors.grey[300];
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Column(
@@ -53,7 +51,7 @@ class EditNoteState extends State<EditNote> {
               ),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  minHeight: screenHeight / 2,
+                  minHeight: screenHeight - 250,
                 ),
                 child: QuillEditor.basic(
                   controller: widget.contentController,
@@ -61,48 +59,6 @@ class EditNoteState extends State<EditNote> {
               ),
             ),
           ],
-        ),
-        
-        Container(
-          color: toolbarColor,
-          width: double.infinity,
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  QuillToolbarHistoryButton(
-                    isUndo: true,
-                    controller: widget.contentController,
-                  ),
-                  QuillToolbarHistoryButton(
-                    isUndo: false,
-                    controller: widget.contentController,
-                  ),
-                  QuillToolbarToggleStyleButton(
-                    controller: widget.contentController,
-                    attribute: Attribute.bold,
-                  ),
-                  QuillToolbarToggleStyleButton(
-                    controller: widget.contentController,
-                    attribute: Attribute.italic,
-                  ),
-                  QuillToolbarToggleStyleButton(
-                    controller: widget.contentController,
-                    attribute: Attribute.underline,
-                  ),
-                  QuillToolbarToggleCheckListButton(
-                    controller: widget.contentController,
-                  ),
-                  QuillToolbarFontSizeButton(
-                    controller: widget.contentController,
-                  ),
-                ],
-              ),
-            ),
-          ),
         ),
       ],
     );
