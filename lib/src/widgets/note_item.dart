@@ -25,31 +25,40 @@ class NoteItem extends StatelessWidget {
           if (note.imageUrl != null)
             ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
-              child: Image.network(
-                note.imageUrl!,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 100,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 300,
+                  maxHeight: 200,
+                ),
+                child: Image.network(
+                  note.imageUrl!,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
               ),
             ),
-          const SizedBox(height: 8.0),
-          Text(
-            note.title,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: textColor,
+          if (note.title.isNotEmpty) ...[
+            const SizedBox(height: 8.0),
+            Text(
+              note.title,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: textColor,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 4.0),
-          Text(
-            note.note.toPlainText(),
-            style: TextStyle(color: textColor),
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
+          ],
+          if (note.note.toPlainText().trim().isNotEmpty) ...[
+            const SizedBox(height: 4.0),
+            Text(
+              note.note.toPlainText().trim(),
+              style: TextStyle(color: textColor),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ],
       ),
     );

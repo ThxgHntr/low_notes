@@ -133,6 +133,32 @@ class NoteItemListViewState extends State<NoteItemListView> {
                         ),
                       );
                     },
+                    onLongPress: () async {
+                      final shouldDelete = await showDialog<bool>(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Delete Note'),
+                            content: const Text(
+                                'Are you sure you want to delete this note?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                child: const Text('Delete'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      if (shouldDelete == true) {
+                        await noteServices.deleteNote(
+                            notes[index].id, notes[index].userId);
+                      }
+                    },
                     child: NoteItem(note: notes[index]),
                   );
                 },
