@@ -8,7 +8,7 @@ import '../login/login_view.dart'; // Add this import
 import 'note_details_view.dart';
 
 /// Displays a list of SampleItems.
-class NoteItemListView extends StatelessWidget {
+class NoteItemListView extends StatefulWidget {
   const NoteItemListView({
     super.key,
     this.items = const [],
@@ -19,9 +19,15 @@ class NoteItemListView extends StatelessWidget {
   final List<NoteModel> items;
 
   @override
-  Widget build(BuildContext context) {
-    final FirebaseAuthServices authServices = FirebaseAuthServices();
+  NoteItemListViewState createState() => NoteItemListViewState();
+}
 
+class NoteItemListViewState extends State<NoteItemListView> {
+  final FirebaseAuthServices authServices = FirebaseAuthServices();
+  String _searchQuery = '';
+
+  @override
+  Widget build(BuildContext context) {
     return FutureBuilder(
       future: authServices.isLoggedIn(),
       builder: (context, snapshot) {
@@ -45,25 +51,47 @@ class NoteItemListView extends StatelessWidget {
                   },
                 ),
               ],
+              title: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      hintText: 'Search...',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                    ),
+                    onChanged: (query) {
+                      setState(() {
+                        _searchQuery = query;
+                      });
+                    },
+                  ),
+                ),
+              ),
             ),
             body: ListView.builder(
               restorationId: 'sampleItemListView',
-              itemCount: items.length,
+              itemCount: widget.items.length,
               itemBuilder: (BuildContext context, int index) {
-                final item = items[index];
-                return ListTile(
-                  title: Text('SampleItem ${item.id}'),
-                  leading: const CircleAvatar(
-                    foregroundImage:
-                        AssetImage('assets/images/flutter_logo.png'),
-                  ),
-                  onTap: () {
-                    Navigator.restorablePushNamed(
-                      context,
-                      NoteDetailsView.routeName,
-                    );
-                  },
-                );
+                final item = widget.items[index];
+                if (item.title
+                    .toLowerCase()
+                    .contains(_searchQuery.toLowerCase())) {
+                  return ListTile(
+                    title: Text(item.title),
+                    onTap: () {
+                      Navigator.restorablePushNamed(
+                        context,
+                        NoteDetailsView.routeName,
+                      );
+                    },
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
               },
             ),
             floatingActionButton: const ExpandableFab(),

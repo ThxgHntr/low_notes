@@ -7,6 +7,7 @@ import 'home/note_item_list_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 import 'login/login_view.dart'; // Add this import
+import 'home/note_create_view.dart'; // Add this import
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -84,8 +85,10 @@ class MyApp extends StatelessWidget {
                     return SettingsView(controller: settingsController);
                   case NoteDetailsView.routeName:
                     return const NoteDetailsView();
-                  case LoginView.routeName: // Add this case
+                  case LoginView.routeName:
                     return const LoginView();
+                  case NoteCreateView.routeName:
+                    return const NoteCreateView();
                   case NoteItemListView.routeName:
                   default:
                     return const NoteItemListView();

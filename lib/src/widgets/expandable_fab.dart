@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:low_notes/src/home/note_create_view.dart';
 
 class ExpandableFab extends StatefulWidget {
   const ExpandableFab({super.key});
@@ -56,70 +57,63 @@ class ExpandableFabState extends State<ExpandableFab>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        if (_isOpen)
-          GestureDetector(
-            onTap: _toggle,
-            child: Container(
-              color: Colors.black54,
-              width: double.infinity,
-              height: double.infinity,
-            ),
-          ),
-        AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return Transform.translate(
-              offset: Offset(0, _translateAnimation.value * 2),
-              child: Opacity(
-                opacity: _fadeAnimation.value,
-                child: FloatingActionButton.extended(
-                  onPressed: () {
-                    // Handle Image button press
-                  },
-                  heroTag: 'image',
-                  icon: const Icon(Icons.image),
-                  label: const Text('Image'),
-                ),
-              ),
-            );
-          },
-        ),
-        AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return Transform.translate(
-              offset: Offset(0, _translateAnimation.value),
-              child: Opacity(
-                opacity: _fadeAnimation.value,
-                child: FloatingActionButton.extended(
-                  onPressed: () {
-                    // Handle Text button press
-                  },
-                  heroTag: 'text',
-                  icon: const Icon(Icons.text_fields),
-                  label: const Text('Text'),
-                ),
-              ),
-            );
-          },
-        ),
-        FloatingActionButton(
-          onPressed: _toggle,
-          heroTag: 'main',
-          child: AnimatedBuilder(
+    return SizedBox.expand(
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        children: [
+          AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
-              return Transform.rotate(
-                angle: _rotateAnimation.value * 3.14,
-                child: const Icon(Icons.add),
+              return Transform.translate(
+                offset: Offset(0, _translateAnimation.value * 2),
+                child: Opacity(
+                  opacity: _fadeAnimation.value,
+                  child: FloatingActionButton.extended(
+                    onPressed: () {
+                      // Handle Image button press
+                    },
+                    heroTag: 'image',
+                    icon: const Icon(Icons.image),
+                    label: const Text('Image'),
+                  ),
+                ),
               );
             },
           ),
-        ),
-      ],
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return Transform.translate(
+                offset: Offset(0, _translateAnimation.value),
+                child: Opacity(
+                  opacity: _fadeAnimation.value,
+                  child: FloatingActionButton.extended(
+                    onPressed: () {
+                      Navigator.pushNamed(context, NoteCreateView.routeName);
+                    },
+                    heroTag: 'text',
+                    icon: const Icon(Icons.text_fields),
+                    label: const Text('Text'),
+                  ),
+                ),
+              );
+            },
+          ),
+          FloatingActionButton(
+            onPressed: _toggle,
+            heroTag: 'main',
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Transform.rotate(
+                  angle: _rotateAnimation.value * 3.14,
+                  child: const Icon(Icons.add),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
