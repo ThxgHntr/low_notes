@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:low_notes/src/models/note_model.dart';
 import 'package:low_notes/src/services/firebase_auth_services.dart'; // Add this import
+import '../widgets/expandable_fab.dart'; // Add this import
 
 import '../settings/settings_view.dart';
 import '../login/login_view.dart'; // Add this import
@@ -65,6 +66,7 @@ class NoteItemListView extends StatelessWidget {
                 );
               },
             ),
+            floatingActionButton: const ExpandableFab(),
           );
         }
       },
