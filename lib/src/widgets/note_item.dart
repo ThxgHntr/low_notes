@@ -16,7 +16,9 @@ class NoteItem extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.45,
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        border: Border.all(color: theme.dividerColor),
+        border: Border.all(
+            color: theme.dividerColor.withAlpha(
+                (0.5 * 255).toInt())), // Use withAlpha instead of withOpacity
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(

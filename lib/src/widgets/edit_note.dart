@@ -51,7 +51,7 @@ class EditNoteState extends State<EditNote> {
               ),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  minHeight: screenHeight - 250,
+                  minHeight: screenHeight - 300,
                 ),
                 child: QuillEditor.basic(
                   controller: widget.contentController,

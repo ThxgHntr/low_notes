@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
             useMaterial3: true,
             colorScheme:
                 ColorScheme.fromSeed(seedColor: Colors.blueAccent).copyWith(
-              surface: Colors.grey[100]!,
+              surface: Colors.white,
             ),
           ),
           darkTheme: ThemeData(
@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(
               seedColor: Colors.white,
               brightness: Brightness.dark,
-            ).copyWith(surface: Colors.grey[900]!),
+            ).copyWith(surface: const Color.fromARGB(255, 15, 15, 15)),
           ),
           themeMode: settingsController.themeMode,
 

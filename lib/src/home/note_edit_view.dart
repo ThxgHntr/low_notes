@@ -110,10 +110,6 @@ class NoteEditViewState extends State<NoteEditView> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.image),
-            onPressed: _pickImage,
-          ),
-          IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () async {
               await noteServices.deleteNote(widget.note.id, widget.note.userId);
@@ -122,29 +118,38 @@ class NoteEditViewState extends State<NoteEditView> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            if (imageUrl != null)
-              GestureDetector(
-                onLongPress: _removeImage,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: screenWidth,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  if (imageUrl != null)
+                    GestureDetector(
+                      onLongPress: _removeImage,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: screenWidth,
+                        ),
+                        child: Image.network(
+                          imageUrl!,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
+                      ),
+                    ),
+                  EditNote(
+                    titleController: titleController,
+                    contentController: contentController,
                   ),
-                  child: Image.network(
-                    imageUrl!,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
-                ),
+                ],
               ),
-            EditNote(
-              titleController: titleController,
-              contentController: contentController,
             ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: const EdgeInsets.all(6.0),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -171,14 +176,15 @@ class NoteEditViewState extends State<NoteEditView> {
                   QuillToolbarToggleCheckListButton(
                     controller: contentController,
                   ),
-                  QuillToolbarFontSizeButton(
-                    controller: contentController,
+                  IconButton(
+                    icon: const Icon(Icons.image),
+                    onPressed: _pickImage,
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -63,7 +63,7 @@ class NoteItemListViewState extends State<NoteItemListView> {
 
     final theme = Theme.of(context);
     final isDarkTheme = theme.brightness == Brightness.dark;
-    final searchFieldColor = isDarkTheme ? Colors.grey[800] : Colors.white;
+    final searchFieldColor = isDarkTheme ? Colors.grey[800] : Colors.grey[100];
     final searchFieldTextColor = isDarkTheme ? Colors.white : Colors.black;
 
     return Scaffold(
