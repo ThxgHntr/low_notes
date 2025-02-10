@@ -5,6 +5,7 @@ import '../models/note_model.dart';
 import '../services/firebase_note_services.dart';
 import '../widgets/edit_note.dart';
 import 'package:uuid/uuid.dart';
+import 'dart:io';
 
 class NoteCreateView extends StatefulWidget {
   const NoteCreateView({super.key});
@@ -22,12 +23,13 @@ class NoteCreateViewState extends State<NoteCreateView> {
   final QuillController contentController = QuillController.basic();
   String? imageUrl;
   String noteId = Uuid().v4();
+  File? localImageFile;
 
   Future<void> _pickImage() async {
-    final url = await noteServices.pickImage(noteId);
-    if (url != null) {
+    final file = await noteServices.pickLocalImage();
+    if (file != null) {
       setState(() {
-        imageUrl = url;
+        localImageFile = file;
       });
     }
   }
@@ -53,9 +55,8 @@ class NoteCreateViewState extends State<NoteCreateView> {
       },
     );
     if (shouldDelete == true) {
-      await noteServices.removeImage(noteId);
       setState(() {
-        imageUrl = null;
+        localImageFile = null;
       });
     }
   }
@@ -81,6 +82,10 @@ class NoteCreateViewState extends State<NoteCreateView> {
           IconButton(
             icon: const Icon(Icons.save),
             onPressed: () async {
+              if (localImageFile != null) {
+                imageUrl =
+                    await noteServices.uploadImage(noteId, localImageFile!);
+              }
               String userId = await authServices.getUserId();
               final note = NoteModel(
                 id: noteId,
@@ -103,15 +108,15 @@ class NoteCreateViewState extends State<NoteCreateView> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  if (imageUrl != null)
+                  if (localImageFile != null)
                     GestureDetector(
                       onLongPress: _removeImage,
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
                           maxWidth: screenWidth,
                         ),
-                        child: Image.network(
-                          imageUrl!,
+                        child: Image.file(
+                          localImageFile!,
                           fit: BoxFit.cover,
                           width: double.infinity,
                         ),

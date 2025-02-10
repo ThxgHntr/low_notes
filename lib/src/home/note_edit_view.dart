@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:low_notes/src/models/note_model.dart';
 import 'package:low_notes/src/services/firebase_note_services.dart';
+import 'package:intl/intl.dart';
 import '../widgets/edit_note.dart';
 
 class NoteEditView extends StatefulWidget {
@@ -73,6 +74,34 @@ class NoteEditViewState extends State<NoteEditView> {
     }
   }
 
+  Future<void> _confirmDeleteNote() async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete Note'),
+          content: const Text('Are you sure you want to delete this note?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+    if (shouldDelete == true) {
+      await noteServices.deleteNote(widget.note.id, widget.note.userId);
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    }
+  }
+
   void _updateNote() {
     final updatedNote = NoteModel(
       id: widget.note.id,
@@ -84,6 +113,20 @@ class NoteEditViewState extends State<NoteEditView> {
       updatedAt: DateTime.now().millisecondsSinceEpoch,
     );
     noteServices.updateNote(updatedNote);
+  }
+
+  String _formatUpdatedAt(int updatedAt) {
+    final updatedDate = DateTime.fromMillisecondsSinceEpoch(updatedAt);
+    final now = DateTime.now();
+    final difference = now.difference(updatedDate);
+
+    if (difference.inDays == 0) {
+      return 'Updated ${TimeOfDay.fromDateTime(updatedDate).format(context)}';
+    } else if (difference.inDays == 1) {
+      return 'Updated Yesterday ${TimeOfDay.fromDateTime(updatedDate).format(context)}';
+    } else {
+      return 'Updated ${DateFormat('MMM d, yyyy').format(updatedDate)}';
+    }
   }
 
   @override
@@ -109,12 +152,12 @@ class NoteEditViewState extends State<NoteEditView> {
           },
         ),
         actions: [
+          Text(
+            _formatUpdatedAt(widget.note.updatedAt),
+          ),
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: () async {
-              await noteServices.deleteNote(widget.note.id, widget.note.userId);
-              if (context.mounted) Navigator.pop(context);
-            },
+            onPressed: _confirmDeleteNote,
           ),
         ],
       ),

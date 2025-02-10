@@ -35,6 +35,21 @@ class FirebaseNoteServices {
     return null;
   }
 
+  Future<File?> pickLocalImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      return File(pickedFile.path);
+    }
+    return null;
+  }
+
+  Future<String> uploadImage(String noteId, File imageFile) async {
+    final storageRef = FirebaseStorage.instance.ref().child('notes/$noteId');
+    await storageRef.putFile(imageFile);
+    return await storageRef.getDownloadURL();
+  }
+
   Future<void> removeImage(String noteId) async {
     final storageRef = FirebaseStorage.instance.ref().child('notes/$noteId');
     await storageRef.delete();
