@@ -26,7 +26,6 @@ class NoteItemListViewState extends State<NoteItemListView> {
   final FirebaseNoteServices noteServices = FirebaseNoteServices();
   String _searchQuery = '';
   Stream<List<NoteModel>>? _notesStream;
-  bool _isLoggedIn = false;
 
   @override
   void initState() {
@@ -39,13 +38,10 @@ class NoteItemListViewState extends State<NoteItemListView> {
     if (isLoggedIn) {
       String userId = await authServices.getUserId();
       setState(() {
-        _isLoggedIn = true;
         _notesStream = noteServices.fetchNotes(userId);
       });
     } else {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacementNamed(context, LoginView.routeName);
-      });
+      if (mounted) Navigator.pushReplacementNamed(context, LoginView.routeName);
     }
   }
 
@@ -57,10 +53,6 @@ class NoteItemListViewState extends State<NoteItemListView> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_isLoggedIn) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
     final theme = Theme.of(context);
     final isDarkTheme = theme.brightness == Brightness.dark;
     final searchFieldColor = isDarkTheme ? Colors.grey[800] : Colors.grey[100];
